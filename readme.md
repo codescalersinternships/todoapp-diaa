@@ -1,7 +1,8 @@
 # Todo App
 This is a Todo application built using Vue.js with TypeScript. The client interacts with the server-side implemented in Golang. The application allows users to manage a list of Todo items, including adding, updating, and deleting items.
 
-![ui](https://github.com/codescalersinternships/todoapp-diaa/assets/77173710/aba59ee0-57a4-444c-bc54-88c31610f5d9)
+
+![ui](https://github.com/codescalersinternships/todoapp-diaa/assets/77173710/a43ffea8-7b3a-4d19-abad-ea23be96bf97)
 
 ## Prerequisites
 
