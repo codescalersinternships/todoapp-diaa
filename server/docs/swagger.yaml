@@ -1,0 +1,101 @@
+definitions:
+  database.TodoItem:
+    properties:
+      finished:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+host: localhost:5000
+info:
+  contact: {}
+  description: Server for todo app.
+  title: Todo API
+paths:
+  /:
+    get:
+      description: Responds with the list of all todo items as JSON.
+      produces:
+      - application/json
+      responses: {}
+      summary: Get todo items array
+      tags:
+      - todo
+    post:
+      description: Takes item name in JSON and store in DB. Return saved JSON.
+      parameters:
+      - description: Item JSON
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/database.TodoItem'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/database.TodoItem'
+      summary: Add new item
+      tags:
+      - todo
+    put:
+      description: Takes item in JSON and update it.
+      parameters:
+      - description: Item JSON
+        in: body
+        name: item
+        required: true
+        schema:
+          $ref: '#/definitions/database.TodoItem'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            type: string
+      summary: Update item
+      tags:
+      - todo
+  /:id:
+    delete:
+      description: Takes item id and delete it.
+      parameters:
+      - description: search item by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: Delete item
+      tags:
+      - todo
+    get:
+      description: Returns the item whose ID value matches the id.
+      parameters:
+      - description: search item by id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/database.TodoItem'
+      summary: Get single item by id
+      tags:
+      - todo
+swagger: "2.0"
