@@ -89,7 +89,6 @@ func (d *Database) FindAll() ([]TodoItem, error) {
 	return todoList, nil
 }
 
-
 // FindById returns the item with the given id
 func (d *Database) FindById(id int64) (*TodoItem, error) {
 	findQuery := fmt.Sprintf("SELECT * FROM todo WHERE id=%d", id)
@@ -106,7 +105,6 @@ func (d *Database) FindById(id int64) (*TodoItem, error) {
 	}
 	return &item, nil
 }
-
 
 // Update updates the item with the given id
 func (d *Database) Update(item TodoItem) error {

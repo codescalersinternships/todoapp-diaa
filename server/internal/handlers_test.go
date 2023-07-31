@@ -198,7 +198,7 @@ func TestUpdateItem(t *testing.T) {
 
 }
 
-func TestDeleteItem(t * testing.T){
+func TestDeleteItem(t *testing.T) {
 	app := NewApp()
 	tempDir := t.TempDir()
 	err := app.StartDB(path.Join(tempDir, "todo.db"))

@@ -18,8 +18,6 @@ func NewApp() *App {
 	return &App{Router: gin.Default(), db: nil}
 }
 
-
-
 // StartDB starts the database
 func (a *App) StartDB(path string) error {
 
@@ -55,7 +53,6 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
-
 // Run runs the app
 func (a *App) Run(address string) error {
 
@@ -66,14 +63,12 @@ func (a *App) Run(address string) error {
 	return a.Router.Run(address)
 }
 
-
 // SetAPIs sets the APIs
 func (a *App) SetAPIs() {
 	a.Router.Use(CORSMiddleware())
 
 	a.Router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	
 	a.Router.GET("/todo", a.FindAll)
 
 	a.Router.POST("/todo", a.AddItem)

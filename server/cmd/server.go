@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	_ "github.com/codescalersinternships/todo-diaa/docs"
+	"log"
 
 	App "github.com/codescalersinternships/todo-diaa/internal"
 )
