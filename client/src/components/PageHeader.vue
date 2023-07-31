@@ -17,7 +17,7 @@ defineEmits(['addTodo'])
       crossorigin="anonymous"
     />
     <h2>My To Do List</h2>
-    <input @keydown.enter="$emit('addTodo', text)"  type="title" placeholder="Title..." v-model="text" />
+    <input @keydown.enter="$emit('addTodo', text)"  id="title" type="title" placeholder="Title..." v-model="text" />
     <button type="button" class="add-btn" @click="$emit('addTodo', text)">Add</button>
   </div>
 </template>

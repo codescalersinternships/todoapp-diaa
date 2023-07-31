@@ -10,12 +10,13 @@ const props = defineProps<{ todo: Todo }>()
     <input
       type="checkbox"
       name=""
-      id=""
+      id="item-checkbox"
       @click="$emit('toggleItemFinish', todo)"
       v-model="todo.finished"
     />
-    <span v-show="!todo.editFlag"> {{ todo.name }}</span>
+    <span class="item-title" v-show="!todo.editFlag"> {{ todo.name }}</span>
     <span
+      id="item-edit"
       v-show="!todo.editFlag"
       @click="$emit('toggleEditFlag', todo)"
       class="edit bi bi-pen"
@@ -30,7 +31,7 @@ const props = defineProps<{ todo: Todo }>()
       @keydown.enter="$emit('updateTodo', todo.name, todo)"
       type="text"
       name=""
-      id=""
+      id="input"
       v-model="todo.name"
     />
   </li>
