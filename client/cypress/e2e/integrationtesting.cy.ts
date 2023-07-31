@@ -1,4 +1,3 @@
-import { mount } from 'cypress/vue'
 
 describe('Todo Item', () => {
   beforeEach(() => {
