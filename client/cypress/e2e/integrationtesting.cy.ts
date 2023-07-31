@@ -1,5 +1,5 @@
-
 describe('Todo Item', () => {
+  let addedItems = 0
   beforeEach(() => {
     cy.request({
       method: 'POST',
@@ -15,6 +15,7 @@ describe('Todo Item', () => {
   it('should set the task as finished and check the checkbox', () => {
     cy.get('[id=item-checkbox').first().click()
     cy.get('[id=item-checkbox]').first().should('be.checked')
+    addedItems++
   })
 
   it('should be able to delete todo', () => {
@@ -36,11 +37,18 @@ describe('Todo Item', () => {
     cy.get('.save').first().should('exist').click()
 
     cy.get('.item-title').first().invoke('text').should('eq', 'new value')
+    addedItems++
   })
 
   it('should add a new task sucessfully ', () => {
     cy.get('#title').should('exist').type('new task')
     cy.get('.add-btn').should('exist').click()
     cy.get('.item-title').first().invoke('text').should('eq', 'new task')
+    cy.get('.delete').first().should('exist').click()
+    addedItems++
+  })
+
+  after(() => {
+    for (let i = 0; i < addedItems; i++) cy.get('.delete').first().click()
   })
 })
