@@ -1,4 +1,4 @@
-package App
+package app
 
 import (
 	"bytes"
@@ -242,7 +242,7 @@ func TestDeleteItem(t * testing.T){
 	}
 }
 
-func insertItemInDB(t *testing.T, a *app) {
+func insertItemInDB(t *testing.T, a *App) {
 	requestBody := database.TodoItem{
 		Name: "my todo",
 	}

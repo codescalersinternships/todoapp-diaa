@@ -1,4 +1,4 @@
-package App
+package app
 
 import (
 	"net/http"
@@ -15,7 +15,9 @@ import (
 // @Param        item  body      database.TodoItem  true  "Item JSON"
 // @Success      201   {object}  database.TodoItem
 // @Router       / [post]
-func (a *app) AddItem(ctx *gin.Context) {
+// @Failure      400   "Invalid request body"
+// @Failure      500   "Internal server error"
+func (a *App) AddItem(ctx *gin.Context) {
 
 	var item database.TodoItem
 	err := ctx.BindJSON(&item)
@@ -45,7 +47,9 @@ func (a *app) AddItem(ctx *gin.Context) {
 // @Tags         todo
 // @Produce      json
 // @Router       / [get]
-func (a *app) FindAll(ctx *gin.Context) {
+// @Success      200   {object}  []database.TodoItem
+// @Failure      500   "Internal server error"
+func (a *App) FindAll(ctx *gin.Context) {
 
 	todoList, err := a.db.FindAll()
 
@@ -64,7 +68,9 @@ func (a *app) FindAll(ctx *gin.Context) {
 // @Param        item  body      database.TodoItem true "Item JSON"
 // @Success      201  {object}  string
 // @Router       / [put]
-func (a *app) UpdateItem(ctx *gin.Context) {
+// @Failure      400  "Invalid request body"
+// @Failure      500  "Internal server error"
+func (a *App) UpdateItem(ctx *gin.Context) {
 	var item database.TodoItem
 	err := ctx.BindJSON(&item)
 
@@ -75,7 +81,7 @@ func (a *app) UpdateItem(ctx *gin.Context) {
 
 	err = a.db.Update(item)
 
-	if err == database.ErrIdNotFound {
+	if err == database.ErrIDNotFound {
 
 		ctx.Status(http.StatusBadRequest)
 		return
@@ -96,12 +102,14 @@ func (a *app) UpdateItem(ctx *gin.Context) {
 // @Param        id  path      string  true  "search item by id"
 // @Success      200  {object}  string
 // @Router       /:id [delete]
-func (a *app) DeleteItem(ctx *gin.Context) {
+// @Failure      404  "Item not found"
+// @Failure      500  "Internal server error"
+func (a *App) DeleteItem(ctx *gin.Context) {
 	id := ctx.Param("id")
 
 	err := a.db.Delete(id)
 
-	if err == database.ErrIdNotFound {
+	if err == database.ErrIDNotFound {
 		ctx.Status(http.StatusNotFound)
 		return
 	}
@@ -114,7 +122,6 @@ func (a *app) DeleteItem(ctx *gin.Context) {
 
 }
 
-// GetItemById                godoc
 // @Summary      Get single item by id
 // @Description  Returns the item whose ID value matches the id.
 // @Tags         todo
@@ -122,7 +129,10 @@ func (a *app) DeleteItem(ctx *gin.Context) {
 // @Param        id  path      string  true  "search item by id"
 // @Success      200  {object}  database.TodoItem
 // @Router       /:id [get]
-func (a *app) GetById(ctx *gin.Context) {
+// @Failure      400  "Invalid request parameter"
+// @Failure      404  "Item not found"
+// @Failure      500  "Internal server error"
+func (a *App) GetById(ctx *gin.Context) {
 
 	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 	if err != nil {

@@ -26,7 +26,20 @@ const docTemplate = `{
                     "todo"
                 ],
                 "summary": "Get todo items array",
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/database.TodoItem"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
             },
             "put": {
                 "description": "Takes item in JSON and update it.",
@@ -54,6 +67,12 @@ const docTemplate = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    "400": {
+                        "description": "Invalid request body"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             },
@@ -83,6 +102,12 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/database.TodoItem"
                         }
+                    },
+                    "400": {
+                        "description": "Invalid request body"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }
@@ -112,6 +137,15 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/database.TodoItem"
                         }
+                    },
+                    "400": {
+                        "description": "Invalid request parameter"
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             },
@@ -139,6 +173,12 @@ const docTemplate = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    "404": {
+                        "description": "Item not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
                     }
                 }
             }

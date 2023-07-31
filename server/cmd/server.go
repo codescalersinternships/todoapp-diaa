@@ -14,10 +14,10 @@ import (
 // @host      localhost:5000
 func main() {
 
-	var db_path string
+	var dbPath string
 	var port int
 
-	flag.StringVar(&db_path, "db", "./todo.db", "database file path")
+	flag.StringVar(&dbPath, "db", "./todo.db", "database file path")
 
 	flag.IntVar(&port, "p", 5000, "port that will be used to run the app")
 
@@ -25,7 +25,7 @@ func main() {
 
 	app := App.NewApp()
 
-	err := app.StartDB(db_path)
+	err := app.StartDB(dbPath)
 
 	if err != nil {
 		log.Fatal(err)

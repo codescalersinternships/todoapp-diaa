@@ -1,4 +1,4 @@
-package App
+package app
 
 import (
 	"github.com/codescalersinternships/todo-diaa/internal/database"
@@ -7,17 +7,21 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-type app struct {
+type App struct {
 	Router *gin.Engine
 	db     *database.Database
 }
 
-func NewApp() *app {
+// NewApp creates a new app
+func NewApp() *App {
 
-	return &app{Router: gin.Default(), db: nil}
+	return &App{Router: gin.Default(), db: nil}
 }
 
-func (a *app) StartDB(path string) error {
+
+
+// StartDB starts the database
+func (a *App) StartDB(path string) error {
 
 	db, err := database.NewDB(path)
 
@@ -34,6 +38,7 @@ func (a *app) StartDB(path string) error {
 	return nil
 }
 
+// CORSMiddleware is the middleware that handles CORS
 func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
@@ -50,7 +55,9 @@ func CORSMiddleware() gin.HandlerFunc {
 	}
 }
 
-func (a *app) Run(address string) error {
+
+// Run runs the app
+func (a *App) Run(address string) error {
 
 	a.SetAPIs()
 
@@ -59,7 +66,9 @@ func (a *app) Run(address string) error {
 	return a.Router.Run(address)
 }
 
-func (a *app) SetAPIs() {
+
+// SetAPIs sets the APIs
+func (a *App) SetAPIs() {
 	a.Router.Use(CORSMiddleware())
 
 	a.Router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

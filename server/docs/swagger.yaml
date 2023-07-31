@@ -19,7 +19,15 @@ paths:
       description: Responds with the list of all todo items as JSON.
       produces:
       - application/json
-      responses: {}
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/database.TodoItem'
+            type: array
+        "500":
+          description: Internal server error
       summary: Get todo items array
       tags:
       - todo
@@ -39,6 +47,10 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/database.TodoItem'
+        "400":
+          description: Invalid request body
+        "500":
+          description: Internal server error
       summary: Add new item
       tags:
       - todo
@@ -58,6 +70,10 @@ paths:
           description: Created
           schema:
             type: string
+        "400":
+          description: Invalid request body
+        "500":
+          description: Internal server error
       summary: Update item
       tags:
       - todo
@@ -77,6 +93,10 @@ paths:
           description: OK
           schema:
             type: string
+        "404":
+          description: Item not found
+        "500":
+          description: Internal server error
       summary: Delete item
       tags:
       - todo
@@ -95,6 +115,12 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/database.TodoItem'
+        "400":
+          description: Invalid request parameter
+        "404":
+          description: Item not found
+        "500":
+          description: Internal server error
       summary: Get single item by id
       tags:
       - todo
