@@ -45,3 +45,17 @@ jobs:
           gofmt-path: ./
           gofmt-flags: -l -d
           working-directory: ./server/
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+
+      - name: Install frontend dependencies
+        run: npm install
+        working-directory: client
+
+      - name: Run frontend tests in Chrome
+        run: npm run test:unit -- --browser chrome
+        working-directory: ./client/
+
