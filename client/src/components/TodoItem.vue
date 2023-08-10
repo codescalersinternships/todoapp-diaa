@@ -27,13 +27,13 @@ defineProps<{ todo: Todo }>()
       class="save bi bi-check2"
     ></span>
     <input
-  v-show="todo.editFlag"
-  @keydown.enter="$emit('updateTodo', todo.name, todo)"
-  type="text"
-  name=""
-  id="input"
-  v-model="todo.name"
-/>
+      v-show="todo.editFlag"
+      @keydown.enter="$emit('updateTodo', todo.name, todo)"
+      type="text"
+      name=""
+      id="input"
+      v-model="todo.name"
+    />
   </li>
 </template>
 
