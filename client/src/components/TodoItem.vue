@@ -2,7 +2,7 @@
 defineEmits(['updateTodo', 'deleteTodo', 'toggleItemFinish', 'toggleEditFlag'])
 
 import { type Todo } from '@/App.vue'
-const props = defineProps<{ todo: Todo }>()
+defineProps<{ todo: Todo }>()
 </script>
 <template>
   <li :class="`${todo.finished && 'checked'} ${todo.id % 2 == 1 && 'odd'}`">
@@ -32,8 +32,7 @@ const props = defineProps<{ todo: Todo }>()
   type="text"
   name=""
   id="input"
-  :value="todo.name"
-  @input="todo.name = $event.target.value"
+  v-model="todo.name"
 />
   </li>
 </template>
