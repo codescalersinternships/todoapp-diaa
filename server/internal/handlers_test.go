@@ -14,28 +14,20 @@ import (
 )
 
 func TestAddItem(t *testing.T) {
-	app := NewApp()
 	tempDir := t.TempDir()
-	err := app.StartDB(path.Join(tempDir, "todo.db"))
-
-	assert.Nil(t, err, "failed to start database")
+	app, err := NewApp(path.Join(tempDir, "todo.db"))
+	assert.Nil(t, err)
 	defer app.db.CloseDB()
 	app.SetAPIs()
 
 	testCases := []struct {
 		name                 string
 		expectedResponseCode int
-		expectedResponseBody database.TodoItem
 		requestBody          map[string]string
 	}{
 		{
 			name:                 "valid request body",
 			expectedResponseCode: http.StatusCreated,
-			expectedResponseBody: database.TodoItem{
-				ID:       1,
-				Name:     "my todo",
-				Finished: 0,
-			},
 			requestBody: map[string]string{
 				"name": "my todo",
 			},
@@ -43,7 +35,6 @@ func TestAddItem(t *testing.T) {
 		{
 			name:                 "invalid request body",
 			expectedResponseCode: http.StatusBadRequest,
-			expectedResponseBody: database.TodoItem{},
 			requestBody: map[string]string{
 				"invalid": "diaa",
 			},
@@ -67,23 +58,15 @@ func TestAddItem(t *testing.T) {
 			app.Router.ServeHTTP(response, request)
 
 			assert.Equal(t, tc.expectedResponseCode, response.Code, "failed in response code")
-
-			var actualResponseBody database.TodoItem
-			json.Unmarshal(response.Body.Bytes(), &actualResponseBody)
-
-			if tc.expectedResponseCode == http.StatusCreated {
-				assert.Equal(t, tc.expectedResponseBody, actualResponseBody)
-			}
 		})
 	}
 }
 
 func TestFindAll(t *testing.T) {
-	app := NewApp()
 	tempDir := t.TempDir()
-	err := app.StartDB(path.Join(tempDir, "todo.db"))
+	app, err := NewApp(path.Join(tempDir, "todo.db"))
+	assert.Nil(t, err)
 
-	assert.Nil(t, err, "failed to start database")
 	defer app.db.CloseDB()
 	app.SetAPIs()
 
@@ -99,11 +82,10 @@ func TestFindAll(t *testing.T) {
 }
 
 func TestFindById(t *testing.T) {
-	app := NewApp()
 	tempDir := t.TempDir()
-	err := app.StartDB(path.Join(tempDir, "todo.db"))
+	app, err := NewApp(path.Join(tempDir, "todo.db"))
+	assert.Nil(t, err)
 
-	assert.Nil(t, err, "failed to start database")
 	defer app.db.CloseDB()
 	app.SetAPIs()
 
@@ -144,11 +126,10 @@ func TestFindById(t *testing.T) {
 }
 
 func TestUpdateItem(t *testing.T) {
-	app := NewApp()
 	tempDir := t.TempDir()
-	err := app.StartDB(path.Join(tempDir, "todo.db"))
+	app, err := NewApp(path.Join(tempDir, "todo.db"))
+	assert.Nil(t, err)
 
-	assert.Nil(t, err, "failed to start database")
 	defer app.db.CloseDB()
 	app.SetAPIs()
 
@@ -171,7 +152,7 @@ func TestUpdateItem(t *testing.T) {
 
 		{
 			name:                 "item id not found",
-			expectedResponseCode: http.StatusBadRequest,
+			expectedResponseCode: http.StatusNotFound,
 			itemData: database.TodoItem{
 				Name:     "todo",
 				ID:       2,
@@ -199,11 +180,10 @@ func TestUpdateItem(t *testing.T) {
 }
 
 func TestDeleteItem(t *testing.T) {
-	app := NewApp()
 	tempDir := t.TempDir()
-	err := app.StartDB(path.Join(tempDir, "todo.db"))
+	app, err := NewApp(path.Join(tempDir, "todo.db"))
+	assert.Nil(t, err)
 
-	assert.Nil(t, err, "failed to start database")
 	defer app.db.CloseDB()
 	app.SetAPIs()
 

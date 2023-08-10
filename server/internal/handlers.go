@@ -14,7 +14,7 @@ import (
 // @Tags         todo
 // @Param        item  body      database.TodoItem  true  "Item JSON"
 // @Success      201   {object}  database.TodoItem
-// @Router       / [post]
+// @Router       /todo/ [post]
 // @Failure      400   "Invalid request body"
 // @Failure      500   "Internal server error"
 func (a *App) AddItem(ctx *gin.Context) {
@@ -23,30 +23,22 @@ func (a *App) AddItem(ctx *gin.Context) {
 	err := ctx.BindJSON(&item)
 
 	if err != nil || item.Name == "" {
-		ctx.Status(http.StatusBadRequest)
+		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
-	id, err := a.db.Insert(item)
+	item, err = a.db.Insert(item)
 	if err != nil {
-		ctx.Status(http.StatusInternalServerError)
+		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
-
-	newStoredTodo, err := a.db.FindById(id)
-
-	if err != nil {
-		ctx.Status(http.StatusInternalServerError)
-		return
-	}
-
-	ctx.JSON(http.StatusCreated, newStoredTodo)
+	ctx.JSON(http.StatusCreated, item)
 }
 
 // @Summary      Get todo items array
 // @Description  Responds with the list of all todo items as JSON.
 // @Tags         todo
 // @Produce      json
-// @Router       / [get]
+// @Router       /todo/ [get]
 // @Success      200   {object}  []database.TodoItem
 // @Failure      500   "Internal server error"
 func (a *App) FindAll(ctx *gin.Context) {
@@ -54,7 +46,7 @@ func (a *App) FindAll(ctx *gin.Context) {
 	todoList, err := a.db.FindAll()
 
 	if err != nil {
-		ctx.Status(http.StatusInternalServerError)
+		ctx.JSON(http.StatusNotFound, err)
 		return
 	}
 
@@ -67,7 +59,7 @@ func (a *App) FindAll(ctx *gin.Context) {
 // @Produce      json
 // @Param        item  body      database.TodoItem true "Item JSON"
 // @Success      201  {object}  string
-// @Router       / [put]
+// @Router       /todo/ [put]
 // @Failure      400  "Invalid request body"
 // @Failure      500  "Internal server error"
 func (a *App) UpdateItem(ctx *gin.Context) {
@@ -75,7 +67,7 @@ func (a *App) UpdateItem(ctx *gin.Context) {
 	err := ctx.BindJSON(&item)
 
 	if err != nil {
-		ctx.Status(http.StatusBadRequest)
+		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
 
@@ -83,12 +75,12 @@ func (a *App) UpdateItem(ctx *gin.Context) {
 
 	if err == database.ErrIDNotFound {
 
-		ctx.Status(http.StatusBadRequest)
+		ctx.JSON(http.StatusNotFound, database.ErrIDNotFound)
 		return
 	}
 
 	if err != nil {
-		ctx.Status(http.StatusInternalServerError)
+		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
@@ -101,7 +93,7 @@ func (a *App) UpdateItem(ctx *gin.Context) {
 // @Produce      json
 // @Param        id  path      string  true  "search item by id"
 // @Success      200  {object}  string
-// @Router       /:id [delete]
+// @Router       /todo/:id [delete]
 // @Failure      404  "Item not found"
 // @Failure      500  "Internal server error"
 func (a *App) DeleteItem(ctx *gin.Context) {
@@ -110,11 +102,11 @@ func (a *App) DeleteItem(ctx *gin.Context) {
 	err := a.db.Delete(id)
 
 	if err == database.ErrIDNotFound {
-		ctx.Status(http.StatusNotFound)
+		ctx.JSON(http.StatusNotFound, database.ErrIDNotFound)
 		return
 	}
 	if err != nil {
-		ctx.Status(http.StatusInternalServerError)
+		ctx.JSON(http.StatusInternalServerError, err)
 		return
 	}
 
@@ -128,7 +120,7 @@ func (a *App) DeleteItem(ctx *gin.Context) {
 // @Produce      json
 // @Param        id  path      string  true  "search item by id"
 // @Success      200  {object}  database.TodoItem
-// @Router       /:id [get]
+// @Router       /todo/:id [get]
 // @Failure      400  "Invalid request parameter"
 // @Failure      404  "Item not found"
 // @Failure      500  "Internal server error"
@@ -136,14 +128,14 @@ func (a *App) GetById(ctx *gin.Context) {
 
 	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 	if err != nil {
-		ctx.Status(http.StatusBadRequest)
+		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
 
 	item, err := a.db.FindById(id)
 
 	if err != nil {
-		ctx.Status(http.StatusNotFound)
+		ctx.JSON(http.StatusNotFound, err)
 		return
 	}
 

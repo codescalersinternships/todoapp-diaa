@@ -52,17 +52,12 @@ func (d *Database) Migrate() error {
 }
 
 // Insert inserts a new item in the database
-func (d *Database) Insert(item TodoItem) (int64, error) {
+func (d *Database) Insert(item TodoItem) (TodoItem, error) {
 	insertQuery := fmt.Sprintf(`INSERT INTO todo (name) VALUES ("%s")`, item.Name)
 
-	res, err := d.db.Exec(insertQuery)
+	_, err := d.db.Exec(insertQuery)
 
-	if err != nil {
-		return -1, err
-	}
-
-	id, _ := res.LastInsertId()
-	return id, nil
+	return item, err
 }
 
 // FindAll returns all the items in the database

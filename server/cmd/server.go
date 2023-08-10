@@ -23,9 +23,7 @@ func main() {
 
 	flag.Parse()
 
-	app := App.NewApp()
-
-	err := app.StartDB(dbPath)
+	app, err := App.NewApp(dbPath)
 
 	if err != nil {
 		log.Fatal(err)

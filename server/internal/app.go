@@ -7,33 +7,33 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
+// App struct for handlers
 type App struct {
 	Router *gin.Engine
 	db     *database.Database
 }
 
 // NewApp creates a new app
-func NewApp() *App {
+func NewApp(dbPath string) (*App, error) {
 
-	return &App{Router: gin.Default(), db: nil}
+	db, err := StartDB(dbPath)
+	if err != nil {
+		return nil, err
+	}
+
+	return &App{Router: gin.Default(), db: db}, nil
 }
 
 // StartDB starts the database
-func (a *App) StartDB(path string) error {
+func StartDB(path string) (*database.Database, error) {
 
 	db, err := database.NewDB(path)
 
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	a.db = db
-	// migration
-	err = db.Migrate()
-	if err != nil {
-		return err
-	}
-	return nil
+	return db, db.Migrate()
 }
 
 // CORSMiddleware is the middleware that handles CORS
@@ -69,13 +69,14 @@ func (a *App) SetAPIs() {
 
 	a.Router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	a.Router.GET("/todo", a.FindAll)
+	todoGroup := a.Router.Group("/todo")
+	todoGroup.GET("", a.FindAll)
 
-	a.Router.POST("/todo", a.AddItem)
+	todoGroup.POST("", a.AddItem)
 
-	a.Router.GET("/todo/:id", a.GetById)
+	todoGroup.GET("/:id", a.GetById)
 
-	a.Router.PUT("/todo", a.UpdateItem)
+	todoGroup.PUT("", a.UpdateItem)
 
-	a.Router.DELETE("/todo/:id", a.DeleteItem)
+	todoGroup.DELETE("/:id", a.DeleteItem)
 }
