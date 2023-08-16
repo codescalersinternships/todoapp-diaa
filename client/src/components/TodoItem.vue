@@ -1,8 +1,8 @@
 <script setup lang="ts">
 defineEmits(['updateTodo', 'deleteTodo', 'toggleItemFinish', 'toggleEditFlag'])
 
-import { type Todo } from '@/App.vue'
-defineProps<{ todo: Todo }>()
+import { type Task } from '@/App.vue'
+defineProps<{ todo: Task }>()
 </script>
 <template>
   <li :class="`${todo.finished && 'checked'} ${todo.id % 2 == 1 && 'odd'}`">

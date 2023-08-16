@@ -2,9 +2,9 @@
 defineEmits(['updateTodo', 'deleteTodo', 'toggleItemFinish', 'toggleEditFlag'])
 
 import TodoItem from '@/components/TodoItem.vue'
-import { type Todo } from '@/App.vue'
+import { type Task } from '@/App.vue'
 
-const props = defineProps<{ todoList: Todo[] }>()
+const props = defineProps<{ todoList: Task[] }>()
 </script>
 
 <template>

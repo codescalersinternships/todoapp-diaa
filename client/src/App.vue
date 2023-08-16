@@ -4,17 +4,17 @@ import { onMounted, ref } from 'vue'
 import TodoList from './components/TodoList.vue'
 import { axiosInstance } from './config/axios'
 import PageHeader from './components/PageHeader.vue'
+import ErrorComponent from './components/ErrorComponent.vue'
 
-
-
-
-export interface Todo {
+export interface Task {
   id: number
   name: string
   finished: boolean
   editFlag: boolean
 }
-const todoList = ref<Todo[]>([])
+const apiError = ref('')
+
+const todoList = ref<Task[]>([])
 
 async function addTodo(text: any) {
   try {
@@ -22,6 +22,7 @@ async function addTodo(text: any) {
     res.data.editFlag = false
     todoList.value.unshift(res.data)
   } catch (error) {
+    apiError.value = 'error adding todo'
     console.log(error)
   }
 }
@@ -31,9 +32,8 @@ async function getTodoList() {
 
     if (!res.data) return
 
-    console.log(res.data)
-    res.data.forEach((element: Todo) => {
-      let todo: Todo = {
+    res.data.forEach((element: Task) => {
+      let todo: Task = {
         id: element.id,
         name: element.name,
         finished: element.finished ? true : false,
@@ -41,38 +41,38 @@ async function getTodoList() {
       }
       todoList.value.unshift(todo)
     })
-    console.log('todolist', todoList.value[0])
   } catch (error) {
+    apiError.value = 'error getting todo list'
     console.log(error)
   }
 }
-async function deleteTodo(todo: Todo) {
+async function deleteTodo(todo: Task) {
   try {
     const res = await axiosInstance.delete(`/todo/${todo.id}`)
     todoList.value = todoList.value.filter((x) => x !== todo)
   } catch (error) {
+    apiError.value = 'error deleting todo'
     console.log(error)
   }
 }
-async function updateTodo(newName: string, todo: Todo) {
+async function updateTodo(newName: string, todo: Task) {
   try {
-    console.log(todo.name)
     const res = await axiosInstance.put('/todo', {
       name: newName,
       id: todo.id,
       finished: todo.finished ? 1 : 0
     })
 
-    console.log(res)
     todo.editFlag = false
   } catch (error) {
+    apiError.value = 'error updating todo'
     console.log(error)
   }
 }
-function toggleEditFlag(todo: Todo) {
+function toggleEditFlag(todo: Task) {
   todo.editFlag = !todo.editFlag
 }
-function toggleItemFinish(todo: Todo) {
+function toggleItemFinish(todo: Task) {
   todo.finished = !todo.finished
   updateTodo(todo.name, todo)
 }
@@ -83,6 +83,8 @@ onMounted(() => {
 <template>
   <div class="app">
     <PageHeader @addTodo="addTodo" />
+
+    <ErrorComponent :error="apiError" />
 
     <TodoList
       :todoList="todoList"
