@@ -17,7 +17,7 @@ import (
 // @Router       /todo/ [post]
 // @Failure      400   "Invalid request body"
 // @Failure      500   "Internal server error"
-func (a *App) AddItem(ctx *gin.Context) {
+func (a *App) HandleAddItem(ctx *gin.Context) {
 
 	var item database.TodoItem
 	err := ctx.BindJSON(&item)
@@ -41,7 +41,7 @@ func (a *App) AddItem(ctx *gin.Context) {
 // @Router       /todo/ [get]
 // @Success      200   {object}  []database.TodoItem
 // @Failure      500   "Internal server error"
-func (a *App) FindAll(ctx *gin.Context) {
+func (a *App) HandleFindAll(ctx *gin.Context) {
 
 	todoList, err := a.db.FindAll()
 
@@ -62,7 +62,7 @@ func (a *App) FindAll(ctx *gin.Context) {
 // @Router       /todo/ [put]
 // @Failure      400  "Invalid request body"
 // @Failure      500  "Internal server error"
-func (a *App) UpdateItem(ctx *gin.Context) {
+func (a *App) HandleUpdateItem(ctx *gin.Context) {
 	var item database.TodoItem
 	err := ctx.BindJSON(&item)
 
@@ -96,7 +96,7 @@ func (a *App) UpdateItem(ctx *gin.Context) {
 // @Router       /todo/:id [delete]
 // @Failure      404  "Item not found"
 // @Failure      500  "Internal server error"
-func (a *App) DeleteItem(ctx *gin.Context) {
+func (a *App) HandleDeleteItem(ctx *gin.Context) {
 	id := ctx.Param("id")
 
 	err := a.db.Delete(id)
@@ -124,7 +124,7 @@ func (a *App) DeleteItem(ctx *gin.Context) {
 // @Failure      400  "Invalid request parameter"
 // @Failure      404  "Item not found"
 // @Failure      500  "Internal server error"
-func (a *App) GetById(ctx *gin.Context) {
+func (a *App) HandleGetById(ctx *gin.Context) {
 
 	id, err := strconv.ParseInt(ctx.Param("id"), 10, 64)
 	if err != nil {

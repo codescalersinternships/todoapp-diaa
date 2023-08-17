@@ -18,7 +18,7 @@ func TestAddItem(t *testing.T) {
 	app, err := NewApp(path.Join(tempDir, "todo.db"))
 	assert.Nil(t, err)
 	defer app.db.CloseDB()
-	app.SetAPIs()
+	app.RegisterHandlers()
 
 	testCases := []struct {
 		name                 string
@@ -68,7 +68,7 @@ func TestFindAll(t *testing.T) {
 	assert.Nil(t, err)
 
 	defer app.db.CloseDB()
-	app.SetAPIs()
+	app.RegisterHandlers()
 
 	request, err := http.NewRequest(http.MethodGet, "/todo", nil)
 
@@ -87,7 +87,7 @@ func TestFindById(t *testing.T) {
 	assert.Nil(t, err)
 
 	defer app.db.CloseDB()
-	app.SetAPIs()
+	app.RegisterHandlers()
 
 	insertItemInDB(t, app)
 
@@ -131,7 +131,7 @@ func TestUpdateItem(t *testing.T) {
 	assert.Nil(t, err)
 
 	defer app.db.CloseDB()
-	app.SetAPIs()
+	app.RegisterHandlers()
 
 	insertItemInDB(t, app)
 
@@ -185,7 +185,7 @@ func TestDeleteItem(t *testing.T) {
 	assert.Nil(t, err)
 
 	defer app.db.CloseDB()
-	app.SetAPIs()
+	app.RegisterHandlers()
 
 	insertItemInDB(t, app)
 

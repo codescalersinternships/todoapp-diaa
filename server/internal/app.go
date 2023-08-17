@@ -56,27 +56,27 @@ func CORSMiddleware() gin.HandlerFunc {
 // Run runs the app
 func (a *App) Run(address string) error {
 
-	a.SetAPIs()
+	a.RegisterHandlers()
 
 	defer a.db.CloseDB()
 
 	return a.Router.Run(address)
 }
 
-// SetAPIs sets the APIs
-func (a *App) SetAPIs() {
+// RegisterHandlers sets the APIs
+func (a *App) RegisterHandlers() {
 	a.Router.Use(CORSMiddleware())
 
 	a.Router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	todoGroup := a.Router.Group("/todo")
-	todoGroup.GET("", a.FindAll)
+	todoGroup.GET("", a.HandleFindAll)
 
-	todoGroup.POST("", a.AddItem)
+	todoGroup.POST("", a.HandleAddItem)
 
-	todoGroup.GET("/:id", a.GetById)
+	todoGroup.GET("/:id", a.HandleGetById)
 
-	todoGroup.PUT("", a.UpdateItem)
+	todoGroup.PUT("", a.HandleUpdateItem)
 
-	todoGroup.DELETE("/:id", a.DeleteItem)
+	todoGroup.DELETE("/:id", a.HandleDeleteItem)
 }
