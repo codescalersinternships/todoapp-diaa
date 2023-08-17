@@ -76,7 +76,7 @@ func (a *App) RegisterHandlers() {
 
 	todoGroup.GET("/:id", a.HandleGetById)
 
-	todoGroup.PUT("", a.HandleUpdateItem)
+	todoGroup.PUT("/:id", a.HandleUpdateItem)
 
 	todoGroup.DELETE("/:id", a.HandleDeleteItem)
 }

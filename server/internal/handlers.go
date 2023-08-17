@@ -63,13 +63,22 @@ func (a *App) HandleFindAll(ctx *gin.Context) {
 // @Failure      400  "Invalid request body"
 // @Failure      500  "Internal server error"
 func (a *App) HandleUpdateItem(ctx *gin.Context) {
+
+	id, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, err)
+		return
+	}
+
 	var item database.TodoItem
-	err := ctx.BindJSON(&item)
+	err = ctx.BindJSON(&item)
 
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, err)
 		return
 	}
+
+	item.ID = id
 
 	err = a.db.Update(item)
 

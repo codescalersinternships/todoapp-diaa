@@ -165,7 +165,7 @@ func TestUpdateItem(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			requestBody, err := json.Marshal(tc.itemData)
 			assert.Nil(t, err)
-			request, err := http.NewRequest(http.MethodPut, "/todo", bytes.NewReader(requestBody))
+			request, err := http.NewRequest(http.MethodPut, fmt.Sprintf("/todo/%d", tc.itemData.ID), bytes.NewReader(requestBody))
 			assert.Nil(t, err)
 
 			request.Header.Set("Content-Type", "application/json")
