@@ -1,0 +1,24 @@
+services:
+  frontend:
+    image: todoapp_client
+    build:
+      context: ./client
+    depends_on: 
+      - backend
+    container_name: client
+    ports:
+      - "8080:8080"
+    environment:
+      - VITE_BACKEND_BASE_URL=http://backend:5000
+  backend:
+    image: todoapp_server
+    build:
+      context: ./server
+    container_name: server
+    ports:
+      - "5000:5000"
+    volumes:
+      - "local_db:/server/todo"
+volumes: 
+  local_db:
+      
